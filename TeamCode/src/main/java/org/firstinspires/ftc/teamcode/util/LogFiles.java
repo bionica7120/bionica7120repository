@@ -102,7 +102,7 @@ public final class LogFiles {
         public List<Double> xs = new ArrayList<>();
         public List<Double> ys = new ArrayList<>();
         public List<Double> headings = new ArrayList<>();
-
+//
         public List<Double> voltages = new ArrayList<>();
 
         public List<List<Integer>> driveEncPositions = new ArrayList<>();
