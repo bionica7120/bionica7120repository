@@ -5,7 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
-import org.firstinspires.ftc.teamcode.CompBotHardwareMap;
+
+import org.firstinspires.ftc.teamcode.hardwaremap;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 
@@ -13,7 +14,7 @@ import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 @Autonomous (name = "BlueRightBackAuto")
 
 public class BlueRightBackAuto extends LinearOpMode {
-    private CompBotHardwareMap robot;
+    private hardwaremap robot;
     private Recognition recognition;
 
     private final double circumference = Math.PI * 2.95;
@@ -35,7 +36,7 @@ public class BlueRightBackAuto extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        robot = new CompBotHardwareMap();
+        robot = new hardwaremap();
         robot.init(hardwareMap);
 
 
