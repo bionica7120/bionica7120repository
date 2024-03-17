@@ -65,22 +65,22 @@ public class TrajectoryAuto extends LinearOpMode {
 
         if (condition == 1)
         {
-            drive.followTrajectory(center1);
-            sleep(500);
-            drive.intakeOpenOrClose(1, 3000);
-            sleep(500);
-            drive.followTrajectory(center2);
-            sleep(500);
-            drive.turn(Math.toRadians(-90));
-            sleep(500);
-            drive.followTrajectory(center3);
-            sleep(500);
-            drive.moveArm(0.5, 4000);
-            sleep(500);
-            drive.intakeOpenOrClose(1, 3000);
-            sleep(500);
-            drive.moveArm(-0.5, 1000);
-            drive.moveArm(0.2, 250);
+//            drive.followTrajectory(center1);
+//            sleep(500);
+//            drive.intakeOpenOrClose(1, 3000);
+//            sleep(500);
+//            drive.followTrajectory(center2);
+//            sleep(500);
+//            drive.turn(Math.toRadians(-90));
+//            sleep(500);
+//            drive.followTrajectory(center3);
+//            sleep(500);
+//            drive.moveArm(0.5, 4000);
+//            sleep(500);
+//            drive.intakeOpenOrClose(1, 3000);
+//            sleep(500);
+//            drive.moveArm(-0.5, 1000);
+//            drive.moveArm(0.2, 250);
 
             return;
 
@@ -88,45 +88,45 @@ public class TrajectoryAuto extends LinearOpMode {
 
         if (condition == 2)
         {
-            drive.followTrajectory(left1);
-            sleep(500);
-            drive.turn(Math.toRadians(90));
-            sleep(500);
-            drive.intakeOpenOrClose(1, 3000);
-            sleep(500);
-            drive.followTrajectory(left2);
-            sleep(500);
-            drive.followTrajectory(left3);
-            sleep(500);
-            drive.followTrajectory(left4);
-            sleep(500);
-            drive.turn(Math.toRadians(180));
-            sleep(500);
-            drive.moveArm(0.5, 4000);
-            sleep(500);
-            drive.intakeOpenOrClose(1, 3000);
-            sleep(500);
-            drive.moveArm(-0.5, 1000);
-            drive.moveArm(0.2, 250);
+//            drive.followTrajectory(left1);
+//            sleep(500);
+//            drive.turn(Math.toRadians(90));
+//            sleep(500);
+//            drive.intakeOpenOrClose(1, 3000);
+//            sleep(500);
+//            drive.followTrajectory(left2);
+//            sleep(500);
+//            drive.followTrajectory(left3);
+//            sleep(500);
+//            drive.followTrajectory(left4);
+//            sleep(500);
+//            drive.turn(Math.toRadians(180));
+//            sleep(500);
+//            drive.moveArm(0.5, 4000);
+//            sleep(500);
+//            drive.intakeOpenOrClose(1, 3000);
+//            sleep(500);
+//            drive.moveArm(-0.5, 1000);
+//            drive.moveArm(0.2, 250);
 
         }
 
         if (condition == 3)
         {
-            drive.followTrajectory(right1);
-            sleep(500);
-            drive.turn(Math.toRadians(-90));
-            sleep(500);
-            drive.intakeOpenOrClose(1, 3000);
-            sleep(500);
-            drive.followTrajectory(right2);
-            sleep(500);
-            drive.moveArm(0.5, 4000);
-            sleep(500);
-            drive.intakeOpenOrClose(1, 3000);
-            sleep(500);
-            drive.moveArm(-0.5, 1000);
-            drive.moveArm(0.2, 250);
+//            drive.followTrajectory(right1);
+//            sleep(500);
+//            drive.turn(Math.toRadians(-90));
+//            sleep(500);
+//            drive.intakeOpenOrClose(1, 3000);
+//            sleep(500);
+//            drive.followTrajectory(right2);
+//            sleep(500);
+//            drive.moveArm(0.5, 4000);
+//            sleep(500);
+//            drive.intakeOpenOrClose(1, 3000);
+//            sleep(500);
+//            drive.moveArm(-0.5, 1000);
+//            drive.moveArm(0.2, 250);
 
 
         }
@@ -134,4 +134,6 @@ public class TrajectoryAuto extends LinearOpMode {
 
 
     }
+
+
 }

@@ -165,7 +165,7 @@ public class BlueLeftTrajectoryAuto extends LinearOpMode {
                         sleep(500);
                         drive.turn(Math.toRadians(90));
                         sleep(500);
-                        drive.intakeOpenOrClose(1, 3000);
+                        intakeOpenOrClose(1, 3000);
                         sleep(500);
                         drive.followTrajectory(left2);
                         sleep(500);
@@ -175,12 +175,12 @@ public class BlueLeftTrajectoryAuto extends LinearOpMode {
                         sleep(500);
                         drive.turn(Math.toRadians(180));
                         sleep(500);
-                        drive.moveArm(0.5, 4000);
+                        moveArm(0.5, 4000);
                         sleep(500);
-                        drive.intakeOpenOrClose(1, 3000);
+                        intakeOpenOrClose(1, 3000);
                         sleep(500);
-                        drive.moveArm(-0.5, 1000);
-                        drive.moveArm(0.2, 250);
+                        moveArm(-0.5, 1000);
+                        moveArm(0.2, 250);
 
                         break;
 
@@ -198,16 +198,16 @@ public class BlueLeftTrajectoryAuto extends LinearOpMode {
                         sleep(500);
                         drive.turn(Math.toRadians(-90));
                         sleep(500);
-                        drive.intakeOpenOrClose(1, 3000);
+                        intakeOpenOrClose(1, 3000);
                         sleep(500);
                         drive.followTrajectory(right2);
                         sleep(500);
-                        drive.moveArm(0.5, 4000);
+                        moveArm(0.5, 4000);
                         sleep(500);
-                        drive.intakeOpenOrClose(1, 3000);
+                        intakeOpenOrClose(1, 3000);
                         sleep(500);
-                        drive.moveArm(-0.5, 1000);
-                        drive.moveArm(0.2, 250);
+                        moveArm(-0.5, 1000);
+                        moveArm(0.2, 250);
 
                         break;
 
@@ -220,7 +220,7 @@ public class BlueLeftTrajectoryAuto extends LinearOpMode {
 
                         drive.followTrajectory(center1);
                         sleep(500);
-                        drive.intakeOpenOrClose(1, 3000);
+                        intakeOpenOrClose(1, 3000);
                         sleep(500);
                         drive.followTrajectory(center2);
                         sleep(500);
@@ -228,12 +228,12 @@ public class BlueLeftTrajectoryAuto extends LinearOpMode {
                         sleep(500);
                         drive.followTrajectory(center3);
                         sleep(500);
-                        drive.moveArm(0.5, 4000);
+                        moveArm(0.5, 4000);
                         sleep(500);
-                        drive.intakeOpenOrClose(1, 3000);
+                        intakeOpenOrClose(1, 3000);
                         sleep(500);
-                        drive.moveArm(-0.5, 1000);
-                        drive.moveArm(0.2, 250);
+                        moveArm(-0.5, 1000);
+                        moveArm(0.2, 250);
 
                         break;
 
