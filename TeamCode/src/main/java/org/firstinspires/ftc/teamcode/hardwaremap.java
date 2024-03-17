@@ -89,9 +89,26 @@ public class hardwaremap {
         imu = hwMap.get(IMU.class, "imu");
         IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.FORWARD, RevHubOrientationOnRobot.UsbFacingDirection.UP));
         imu.initialize(parameters);
+    }
 
+    public void power(double output) {
+        leftBackDrive.setPower(-output);
+        rightBackDrive.setPower(output);
+        leftFrontDrive.setPower(-output);
+        rightFrontDrive.setPower(output);
 
+    }
 
+    public void mecanumDrive(double x, double y, double r) {
+        double frontLeftPower = y + x + r;
+        double frontRightPower = y - x - r;
+        double backLeftPower = y - x + r;
+        double backRightPower = y + x - r;
+
+        rightBackDrive.setPower(backLeftPower);
+        leftBackDrive.setPower(backRightPower);
+        leftFrontDrive.setPower(frontLeftPower);
+        rightFrontDrive.setPower(frontRightPower);
     }
 
 }

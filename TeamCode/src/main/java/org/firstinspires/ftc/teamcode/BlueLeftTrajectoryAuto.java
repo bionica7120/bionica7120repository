@@ -62,7 +62,7 @@ import java.util.List;
 //@Disabled
 public class BlueLeftTrajectoryAuto extends LinearOpMode {
 
-    private CompBotHardwareMap robot;
+    private hardwaremap robot;
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
 
     // TFOD_MODEL_ASSET points to a model file stored in the project Asset location,
@@ -95,7 +95,7 @@ public class BlueLeftTrajectoryAuto extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
 
 
-        robot = new CompBotHardwareMap();
+        robot = new hardwaremap();
         robot.init(hardwareMap);
         initTfod();
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
