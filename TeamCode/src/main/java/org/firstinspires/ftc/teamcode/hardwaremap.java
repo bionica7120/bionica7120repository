@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 
-public class CompBotHardwareMap {
+public class hardwaremap {
 
     //used to instantiate objects
     HardwareMap hwMap;
