@@ -42,8 +42,8 @@ public class TeleOpFieldCentric extends LinearOpMode {
             // Create a vector from the gamepad x/y inputs
             // Then, rotate that vector by the inverse of that heading
             Vector2d input = new Vector2d(
-                    -gamepad1.left_stick_y,
-                    -gamepad1.left_stick_x
+                    ScaleInputDrive(-gamepad1.left_stick_y),
+                    ScaleInputDrive(-gamepad1.left_stick_x)
             ).rotated(-poseEstimate.getHeading());
 
             // Pass in the rotated input + right stick value for rotation
@@ -52,7 +52,7 @@ public class TeleOpFieldCentric extends LinearOpMode {
                     new Pose2d(
                             input.getX(),
                             input.getY(),
-                            -gamepad1.right_stick_x
+                            ScaleInputDrive(-gamepad1.right_stick_x)
                     )
             );
 
@@ -65,5 +65,29 @@ public class TeleOpFieldCentric extends LinearOpMode {
             telemetry.addData("heading", poseEstimate.getHeading());
             telemetry.update();
         }
+    }
+
+    public float ScaleInputDrive(float ScaleInputDrive) {
+        // This is an array with the numbers that you can see.  This will allow both joystick values
+        // to be close(not having to be exact) and still be able to get the same power as the other
+        // if needed, or if not needed, it can help the driver to be a little more exact while driving.
+        double[] DriveArray = {0,.1,.15,.2,.25,.3,.4,.45,.5,.6,.7,.75,.8, .85,.9,1};
+        // For every number in this DriveArray, make sure you have the proper number below
+        //ScaleInputDrive is multiplied by (DriveArray total variables) 15 because arrays start at 0, so its numbers 0-15, instead of 1-16
+        int DriveIndex = (int) (ScaleInputDrive * 15);
+        // This allows for "negative" numbers in the array, without having to directly enter them
+        if (DriveIndex < 0) {
+            DriveIndex = -DriveIndex;
+        }
+
+        double DriveScale = 0;
+        if (ScaleInputDrive < 0) {
+            DriveScale = -DriveArray[DriveIndex];
+        } else {
+            DriveScale = DriveArray[DriveIndex];
+        }
+        // Returns the value DriveScale, which is used with the Joysticks when they are set to
+        // the variables DriveLeft and DriveRight
+        return (float)DriveScale;
     }
 }
