@@ -48,7 +48,8 @@ import org.firstinspires.ftc.teamcode.util.LynxModuleUtil;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-//
+
+/*
  * Simple tank drive hardware implementation for REV hardware.
  */
 @Config
@@ -93,14 +94,14 @@ public class SampleTankDrive extends TankDrive {
         imu.initialize(parameters);
 
         // add/remove motors depending on your robot (e.g., 6WD)
-        DcMotorEx leftFront = hardwareMap.get(DcMotorEx.class, "leftFront");
-        DcMotorEx leftRear = hardwareMap.get(DcMotorEx.class, "leftRear");
-        DcMotorEx rightRear = hardwareMap.get(DcMotorEx.class, "rightRear");
-        DcMotorEx rightFront = hardwareMap.get(DcMotorEx.class, "rightFront");
+        DcMotorEx frontLeftDrive = hardwareMap.get(DcMotorEx.class, "frontLeft");
+        DcMotorEx backLeftDrive = hardwareMap.get(DcMotorEx.class, "backLeft");
+        DcMotorEx backRightDrive = hardwareMap.get(DcMotorEx.class, "backRight");
+        DcMotorEx frontRightDrive = hardwareMap.get(DcMotorEx.class, "frontRight");
 
-        motors = Arrays.asList(leftFront, leftRear, rightRear, rightFront);
-        leftMotors = Arrays.asList(leftFront, leftRear);
-        rightMotors = Arrays.asList(rightFront, rightRear);
+        motors = Arrays.asList(frontLeftDrive, backLeftDrive, backRightDrive, frontRightDrive);
+        leftMotors = Arrays.asList(frontLeftDrive, backLeftDrive);
+        rightMotors = Arrays.asList(frontRightDrive, backRightDrive);
 
         for (DcMotorEx motor : motors) {
             MotorConfigurationType motorConfigurationType = motor.getMotorType().clone();
@@ -119,6 +120,8 @@ public class SampleTankDrive extends TankDrive {
         }
 
         // TODO: reverse any motors using DcMotor.setDirection()
+        frontRightDrive.setDirection(DcMotor.Direction.REVERSE);
+        backRightDrive.setDirection(DcMotor.Direction.REVERSE);
 
         // TODO: if desired, use setLocalizer() to change the localization method
         // for instance, setLocalizer(new ThreeTrackingWheelLocalizer(...));
