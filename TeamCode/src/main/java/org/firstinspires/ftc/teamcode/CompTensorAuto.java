@@ -19,7 +19,7 @@ import java.util.List;
 @Autonomous (name = "CompTensorAuto")
 
 public class CompTensorAuto extends LinearOpMode {
-    private CompBotHardwareMap robot;
+    private hardwaremap robot;
     private Recognition recognition;
 
     private final double circumference = Math.PI * 2.95;
@@ -41,7 +41,7 @@ public class CompTensorAuto extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        robot = new CompBotHardwareMap();
+        robot = new hardwaremap();
         robot.init(hardwareMap);
         initTfod();
 

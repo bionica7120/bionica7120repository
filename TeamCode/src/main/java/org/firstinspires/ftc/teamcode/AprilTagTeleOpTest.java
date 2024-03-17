@@ -86,7 +86,7 @@ import java.util.concurrent.TimeUnit;
 public class AprilTagTeleOpTest extends LinearOpMode
 {
     private ElapsedTime runtime = new ElapsedTime();
-    private TestBotHardwareMap robot;
+    private hardwaremap robot;
 
     // Adjust these numbers to suit your robot.
     final double DESIRED_DISTANCE = 12.0; //  this is how close the camera should get to the target (inches)
@@ -115,7 +115,7 @@ public class AprilTagTeleOpTest extends LinearOpMode
 
     @Override public void runOpMode()
     {
-        robot = new TestBotHardwareMap();
+        robot = new hardwaremap();
         robot.init(hardwareMap);
 
         robot.rightFrontDrive.setDirection(DcMotorSimple.Direction.REVERSE);

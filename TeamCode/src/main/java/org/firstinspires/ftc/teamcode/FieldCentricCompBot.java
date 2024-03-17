@@ -39,13 +39,13 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 public class FieldCentricCompBot extends LinearOpMode {
     // Declare OpMode members for each of the 4 motors.
     private ElapsedTime runtime = new ElapsedTime();
-    private CompBotHardwareMap robot;
+    private hardwaremap robot;
 
     @Override
     public void runOpMode() {
         // Initialize the hardware variables. Note that the strings used here must correspond
         // to the names assigned during the robot configuration step on the DS or RC devices.
-        robot = new CompBotHardwareMap();
+        robot = new hardwaremap();
         robot.init(hardwareMap);
 
         //double intakePower = 0;

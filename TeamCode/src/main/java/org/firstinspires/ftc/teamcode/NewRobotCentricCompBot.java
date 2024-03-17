@@ -38,7 +38,7 @@ import com.qualcomm.robotcore.util.Range;
 public class NewRobotCentricCompBot extends LinearOpMode {
     // Declare OpMode members for each of the 4 motors.
     private ElapsedTime runtime = new ElapsedTime();
-    private CompBotHardwareMap robot;
+    private hardwaremap robot;
 
     public final double circumference = Math.PI * 2.95;
     public final double ticks = 560;
@@ -47,7 +47,7 @@ public class NewRobotCentricCompBot extends LinearOpMode {
     public void runOpMode() {
         // Initialize the hardware variables. Note that the strings used here must correspond
         // to the names assigned during the robot configuration step on the DS or RC devices.
-        robot = new CompBotHardwareMap();
+        robot = new hardwaremap();
         robot.init(hardwareMap);
 
         //double armPower = 0;

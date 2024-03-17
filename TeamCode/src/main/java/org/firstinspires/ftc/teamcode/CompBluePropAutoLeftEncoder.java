@@ -54,7 +54,7 @@ import java.util.List;
 //@Disabled
 public class CompBluePropAutoLeftEncoder extends LinearOpMode {
 
-    private CompBotHardwareMap robot;
+    private hardwaremap robot;
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
 
     // TFOD_MODEL_ASSET points to a model file stored in the project Asset location,
@@ -89,7 +89,7 @@ public class CompBluePropAutoLeftEncoder extends LinearOpMode {
     @Override
     public void runOpMode() {
 
-        robot = new CompBotHardwareMap();
+        robot = new hardwaremap();
         robot.init(hardwareMap);
         initTfod();
 
