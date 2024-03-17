@@ -1,9 +1,12 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.testbot;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 
 /**
@@ -34,7 +37,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp
 @Disabled
-public class RobotCentricTestBot extends LinearOpMode {
+public class FieldCentricTestBot extends LinearOpMode {
     // Declare OpMode members for each of the 4 motors.
     private ElapsedTime runtime = new ElapsedTime();
     private TestBotHardwareMap robot;
@@ -46,8 +49,10 @@ public class RobotCentricTestBot extends LinearOpMode {
         robot = new TestBotHardwareMap();
         robot.init(hardwareMap);
 
-        double intakePower = 0;
+        //double intakePower = 0;
 
+        robot.rightFrontDrive.setDirection(DcMotorSimple.Direction.REVERSE);
+        robot.rightBackDrive.setDirection(DcMotorSimple.Direction.REVERSE);
 
         // Wait for the game to start (driver presses PLAY)
         telemetry.addData("Status", "Initialized");
@@ -59,8 +64,41 @@ public class RobotCentricTestBot extends LinearOpMode {
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
-
             double max;
+
+            double axial = -gamepad1.left_stick_y;  // Note: pushing stick forward gives negative value
+            double lateral = gamepad1.left_stick_x * 1.1; //Multiply by 1.1 to counteract imperfect strafing, adjust based on driver
+            double yaw = gamepad1.right_stick_x;
+
+            if (gamepad1.back) {
+                robot.imu.resetYaw();
+            }
+
+            double botHeading = robot.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+
+            //Rotate the movement direction counter to the bot's rotation
+            double rotX = lateral * Math.cos(-botHeading) - axial * Math.sin(-botHeading);
+            double rotY = lateral * Math.sin(-botHeading) + axial * Math.cos(-botHeading);
+
+            //double denominator = Math.max(Math.abs(rotY) + Math.abs(rotX) + Math.abs(yaw), 1);
+            double rightBackPower = (rotY + rotX - yaw);
+            double leftBackPower = (rotY - rotX + yaw);
+            double rightFrontPower = (rotY - rotX - yaw);
+            double leftFrontPower = (rotY + rotX + yaw);
+
+            max = Math.max(Math.abs(leftFrontPower), Math.abs(rightFrontPower));
+            max = Math.max(max, Math.abs(leftBackPower));
+            max = Math.max(max, Math.abs(rightBackPower));
+            //max = Math.max(max, Math.abs(intakePower));
+
+            if (max > 1.0) {
+                leftFrontPower  /= max;
+                rightFrontPower /= max;
+                leftBackPower   /= max;
+                rightBackPower  /= max;
+            }
+
+            /*double max;
 
 
             // POV Mode uses left joystick to go forward & strafe, and right joystick to rotate.
@@ -91,6 +129,8 @@ public class RobotCentricTestBot extends LinearOpMode {
                 leftBackPower   /= max;
                 rightBackPower  /= max;
             }
+            */
+
 
 //
             robot.leftFrontDrive.setPower(leftFrontPower);
