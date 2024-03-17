@@ -27,7 +27,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.regionalsAuto;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -38,6 +38,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.firstinspires.ftc.teamcode.hardwaremap;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 
@@ -50,16 +51,16 @@ import java.util.List;
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list.
  */
-@Autonomous(name = "CompRedPropAuto - LEFT ENC")
+@Autonomous(name = "CompBluePropAuto - RIGHT ENC")
 //@Disabled
-public class CompRedPropAutoLeftEncoder extends LinearOpMode {
+public class CompBluePropAutoRightEncoder extends LinearOpMode {
 
     private hardwaremap robot;
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
 
     // TFOD_MODEL_ASSET points to a model file stored in the project Asset location,
     // this is only used for Android Studio when using models in Assets.
-    private static final String TFOD_MODEL_ASSET = "RedPropModel.tflite";
+    private static final String TFOD_MODEL_ASSET = "BluePropModel.tflite";
     // TFOD_MODEL_FILE points to a model file stored onboard the Robot Controller's storage,
     // this is used when uploading models directly to the RC using the model upload interface.
     private static final String TFOD_MODEL_FILE = "/sdcard/FIRST/tflitemodels/myCustomModel.tflite";
@@ -122,16 +123,16 @@ public class CompRedPropAutoLeftEncoder extends LinearOpMode {
 
 
 
-                    if (condition == 2)
-                    {
-                        telemetry.addLine("Pixel detected");
-                        telemetry.addData("Condition", condition);
-                        telemetry.update();
+                if (condition == 2)
+                {
+                    telemetry.addLine("Pixel detected");
+                    telemetry.addData("Condition", condition);
+                    telemetry.update();
 
-                        driveForward(0.2, 28);
-                        driveRotate(0.4, -20);
-                        intakeOpenOrClose(1, 1500);
-                        driveForward(0.2, -2);
+                    driveForward(0.2, 28);
+                    driveRotate(0.4, -20);
+                    intakeOpenOrClose(1, 1500);
+                    driveForward(0.2, -2);
 //                        moveArm(0.4, -5);
 //                        driveForward(0.2, -34);
 //                        driveStrafeRightorLeft(0.2, -4);
@@ -141,21 +142,21 @@ public class CompRedPropAutoLeftEncoder extends LinearOpMode {
 //                        moveArm(0.3, 10);
 //                        driveStrafeRightorLeft(0.2, -20);
 
-                        break;
+                    break;
 
 
-                    }
+                }
 
-                    if (condition == 3)
-                    {
-                        telemetry.addLine("Pixel detected");
-                        telemetry.addData("Condition", condition);
-                        telemetry.update();
+                if (condition == 3)
+                {
+                    telemetry.addLine("Pixel detected");
+                    telemetry.addData("Condition", condition);
+                    telemetry.update();
 
-                        driveForward(0.2, 28);
-                        driveRotate(0.4, 20);
-                        intakeOpenOrClose(1, 1500);
-                        driveForward(0.2, -2);
+                    driveForward(0.2, 28);
+                    driveRotate(0.4, 20);
+                    intakeOpenOrClose(1, 1500);
+                    driveForward(0.2, -2);
 //                        moveArm(0.4, -5);
 //                        driveStrafeRightorLeft(0.2, -10);
 //                        driveForward(0.2, 33);
@@ -167,18 +168,18 @@ public class CompRedPropAutoLeftEncoder extends LinearOpMode {
 //                        moveArm(0.4, 10);
 //                        driveStrafeRightorLeft(0.2, 17);
 
-                        break;
+                    break;
 
-                    }
+                }
 
-                    if (condition == 1) {
+                if (condition == 1) {
 
-                        telemetry.addLine("Pixel detected");
-                        telemetry.addData("Condition", condition);
-                        telemetry.update();
-                        driveForward(0.2, 28);
-                        intakeOpenOrClose(1, 1500);
-                        driveForward(0.2, -1);
+                    telemetry.addLine("Pixel detected");
+                    telemetry.addData("Condition", condition);
+                    telemetry.update();
+                    driveForward(0.2, 28);
+                    intakeOpenOrClose(1, 1500);
+                    driveForward(0.2, -1);
 //                        driveRotate(0.4, 20);
 //                        moveArm(0.4, -5);
 //                        driveForward(0.2, 33);
@@ -192,10 +193,10 @@ public class CompRedPropAutoLeftEncoder extends LinearOpMode {
 //                        driveStrafeRightorLeft(0.2, -20);
 
 
-                        break;
+                    break;
 
 
-                    }
+                }
 
 
                 // Save CPU resources; can resume streaming when needed.

@@ -27,7 +27,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.qualifiersAuto;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -36,6 +36,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.firstinspires.ftc.teamcode.hardwaremap;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 
@@ -48,16 +49,16 @@ import java.util.List;
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list.
  */
-@Autonomous(name = "CompBluePropAuto - TAPE RIGHT")
+@Autonomous(name = "CompRedPropAuto - TAPE LEFT")
 //@Disabled
-public class CompBluePropAutoTapeRight extends LinearOpMode {
+public class CompRedPropAutoTapeLeft extends LinearOpMode {
 
     private hardwaremap robot;
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
 
     // TFOD_MODEL_ASSET points to a model file stored in the project Asset location,
     // this is only used for Android Studio when using models in Assets.
-    private static final String TFOD_MODEL_ASSET = "BluePropModel.tflite";
+    private static final String TFOD_MODEL_ASSET = "RedPropModel.tflite";
     // TFOD_MODEL_FILE points to a model file stored onboard the Robot Controller's storage,
     // this is used when uploading models directly to the RC using the model upload interface.
     private static final String TFOD_MODEL_FILE = "/sdcard/FIRST/tflitemodels/myCustomModel.tflite";
@@ -78,8 +79,8 @@ public class CompBluePropAutoTapeRight extends LinearOpMode {
 
     public boolean pixelDetected;
     public int condition = 1;
-    public double x;
-    public double y;
+    double x;
+    double y;
 
     @Override
     public void runOpMode() {
@@ -139,10 +140,21 @@ public class CompBluePropAutoTapeRight extends LinearOpMode {
                         sleep(1000);
 
                         drive(-0.2);
-                        sleep(1000);
+                        sleep(500);
 
                         drive(0);
-
+//                        sleep(1000);
+//
+//                        driveRot(0.5);
+//                        sleep(1900);
+//
+//                        drive(0);
+//                        sleep(1000);
+//
+//                        drive(0.2);
+//                        sleep(5000);
+//
+//                        drive(0);
 
                         break;
 
@@ -178,9 +190,32 @@ public class CompBluePropAutoTapeRight extends LinearOpMode {
                         drive(-0.2);
                         sleep(200);
 
-
-                        //stop
                         drive(0);
+//                        sleep(1000);
+//
+//                        driveRot(-0.5);
+//                        sleep(900);
+//
+//                        drive(0);
+//                        sleep(1000);
+//
+//                        drive(0.2);
+//                        sleep(2000);
+//
+//                        drive(0);
+//                        sleep(1000);
+//
+//                        driveRot(0.5);
+//                        sleep(900);
+
+//                        drive(0);
+//                        sleep(1000);
+//
+//                        drive(0.2);
+//                        sleep(8000);
+//
+//                        //stop
+//                        drive(0);
 
                         break;
 
@@ -216,10 +251,23 @@ public class CompBluePropAutoTapeRight extends LinearOpMode {
                         sleep(500);
 
                         //stop
-
-
-                        //stop
                         drive(0);
+//                        sleep(1000);
+//
+//                        //rotate
+//                        driveRot(-0.5);
+//                        sleep(900);
+//
+//                        //stop
+//                        drive(0);
+//                        sleep(1000);
+//
+//                        //forward
+//                        drive(0.2);
+//                        sleep(6000);
+//
+//                        //stop
+//                        drive(0);
 //                        sleep(1000);
 //
 //                        //rotate

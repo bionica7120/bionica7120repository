@@ -27,9 +27,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode;
-
-import static java.lang.Thread.sleep;
+package org.firstinspires.ftc.teamcode.qualifiersAuto;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -38,16 +36,9 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.firstinspires.ftc.teamcode.hardwaremap;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
-
-import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-
-import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
 import java.util.List;
 
@@ -58,16 +49,16 @@ import java.util.List;
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list.
  */
-@Autonomous(name = "RedTrajectoryAuto - RIGHT")
+@Autonomous(name = "CompBluePropAuto - TAPE RIGHT")
 //@Disabled
-public class RedRightTrajectoryAuto extends LinearOpMode {
+public class CompBluePropAutoTapeRight extends LinearOpMode {
 
     private hardwaremap robot;
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
 
     // TFOD_MODEL_ASSET points to a model file stored in the project Asset location,
     // this is only used for Android Studio when using models in Assets.
-    private static final String TFOD_MODEL_ASSET = "RedPropModel.tflite";
+    private static final String TFOD_MODEL_ASSET = "BluePropModel.tflite";
     // TFOD_MODEL_FILE points to a model file stored onboard the Robot Controller's storage,
     // this is used when uploading models directly to the RC using the model upload interface.
     private static final String TFOD_MODEL_FILE = "/sdcard/FIRST/tflitemodels/myCustomModel.tflite";
@@ -88,58 +79,17 @@ public class RedRightTrajectoryAuto extends LinearOpMode {
 
     public boolean pixelDetected;
     public int condition = 1;
-    double x;
-    double y;
+    public double x;
+    public double y;
 
     @Override
-    public void runOpMode() throws InterruptedException {
-
+    public void runOpMode() {
 
         robot = new hardwaremap();
         robot.init(hardwareMap);
         initTfod();
-        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
-        Trajectory center1 = drive.trajectoryBuilder(new Pose2d(0, 0, 0))
-                .forward(28)
-                .build();
-
-        Trajectory center2 = drive.trajectoryBuilder(center1.end())
-                .back(5)
-                .build();
-
-        Trajectory center3 = drive.trajectoryBuilder(center2.end().plus(new Pose2d(0, 0, Math.toRadians(90))), false)
-                .back(28)
-                .build();
-
-        Trajectory left1 = drive.trajectoryBuilder(new Pose2d(0, 0, 0))
-                .forward(28)
-                .build();
-
-        Trajectory left2 = drive.trajectoryBuilder(left1.end().plus(new Pose2d(0, 0, Math.toRadians(90))), false)
-                .strafeLeft(5)
-                .build();
-
-        Trajectory left3 = drive.trajectoryBuilder(left2.end())
-                .back(38)
-                .build();
-
-        Trajectory left4 = drive.trajectoryBuilder(left3.end())
-                .strafeRight(5)
-                .build();
-
-        Trajectory right1 = drive.trajectoryBuilder(new Pose2d(0, 0, 0))
-                .forward(28)
-                .build();
-
-        Trajectory right2 = drive.trajectoryBuilder(right1.end().plus(new Pose2d(0, 0, Math.toRadians(-90))), false)
-                .strafeRight(5)
-                .build();
-
-        Trajectory right3 = drive.trajectoryBuilder(right2.end())
-                .forward(28)
-                .build();
-
+        robot.init(hardwareMap);
 
         // Wait for the DS start button to be touched.
         telemetry.addData("DS preview on/off", "3 dots, Camera Stream");
@@ -164,26 +114,36 @@ public class RedRightTrajectoryAuto extends LinearOpMode {
                         telemetry.addData("Condition", condition);
                         telemetry.update();
 
-                        drive.followTrajectory(left1);
-                        sleep(500);
-                        drive.turn(Math.toRadians(90));
-                        sleep(500);
-                        drive.intakeOpenOrClose(1, 3000);
-                        sleep(500);
-                        drive.followTrajectory(left2);
-                        sleep(500);
-                        drive.followTrajectory(left3);
-                        sleep(500);
-                        drive.followTrajectory(left4);
-                        sleep(500);
-                        drive.turn(Math.toRadians(180));
-                        sleep(500);
-                        drive.moveArm(0.5, 4000);
-                        sleep(500);
-                        drive.intakeOpenOrClose(1, 3000);
-                        sleep(500);
-                        drive.moveArm(-0.5, 1000);
-                        drive.moveArm(0.2, 250);
+                        drive(0.2);
+                        sleep(4700);
+                        drive(0);
+                        sleep(1000);
+
+                        drive(0);
+                        sleep(1000);
+
+                        driveRot(0.5);
+                        sleep(900);
+
+                        drive(0);
+                        sleep(1000);
+
+//                        drive(0.2);
+//                        sleep(500);
+
+                        drive(0);
+                        sleep(1000);
+
+                        intakeOpenOrClose(1, 3000);
+
+                        drive(0);
+                        sleep(1000);
+
+                        drive(-0.2);
+                        sleep(1000);
+
+                        drive(0);
+
 
                         break;
 
@@ -197,24 +157,31 @@ public class RedRightTrajectoryAuto extends LinearOpMode {
                         telemetry.addData("Condition", condition);
                         telemetry.update();
 
-                        drive.followTrajectory(right1);
-                        sleep(500);
-                        drive.turn(Math.toRadians(-90));
-                        sleep(500);
-                        drive.intakeOpenOrClose(1, 3000);
-                        sleep(500);
-                        drive.followTrajectory(right2);
-                        sleep(500);
-                        drive.followTrajectory(right3);
-                        sleep(500);
-                        drive.turn(Math.toRadians(180));
-                        sleep(500);
-                        drive.moveArm(0.5, 4000);
-                        sleep(500);
-                        drive.intakeOpenOrClose(1, 3000);
-                        sleep(500);
-                        drive.moveArm(-0.5, 1000);
-                        drive.moveArm(0.2, 250);
+                        drive(0.2);
+                        sleep(4700);
+                        drive(0);
+                        sleep(1000);
+
+                        drive(0);
+                        sleep(1000);
+
+                        driveRot(-0.5);
+                        sleep(900);
+
+                        drive(0);
+                        sleep(1000);
+
+                        intakeOpenOrClose(1, 3000);
+
+                        drive(0);
+                        sleep(1000);
+
+                        drive(-0.2);
+                        sleep(200);
+
+
+                        //stop
+                        drive(0);
 
                         break;
 
@@ -225,22 +192,54 @@ public class RedRightTrajectoryAuto extends LinearOpMode {
                         telemetry.addData("Condition", condition);
                         telemetry.update();
 
-                        drive.followTrajectory(center1);
+                        drive(0.2);
+                        sleep(4700);
+                        drive(0);
+                        sleep(1000);
+
+                        //forward
+//                        drive(0.2);
+//                        sleep(1100);
+
+                        //stop
+                        drive(0);
+                        sleep(1000);
+
+                        //deposits pixel
+                        intakeOpenOrClose(1, 3000);
+
+                        //stop
+                        drive(0);
+                        sleep(1000);
+
+                        //backward
+                        drive(-0.2);
                         sleep(500);
-                        drive.intakeOpenOrClose(1, 3000);
-                        sleep(500);
-                        drive.followTrajectory(center2);
-                        sleep(500);
-                        drive.turn(Math.toRadians(90));
-                        sleep(500);
-                        drive.followTrajectory(center3);
-                        sleep(500);
-                        drive.moveArm(0.5, 4000);
-                        sleep(500);
-                        drive.intakeOpenOrClose(1, 3000);
-                        sleep(500);
-                        drive.moveArm(-0.5, 1000);
-                        drive.moveArm(0.2, 250);
+
+                        //stop
+
+
+                        //stop
+                        drive(0);
+//                        sleep(1000);
+//
+//                        //rotate
+//                        driveRot(0.5);
+//                        sleep(1800);
+//
+//                        //stop
+//                        drive(0);
+//                        sleep(1000);
+//
+//                        //arm up
+//                    moveArm(-0.7);
+//                    sleep(800);
+//
+//                    drive(-0.3);
+//                    sleep(200);
+//
+//
+//                    intakeOpenOrClose(1, 5000);
 
                         break;
 
@@ -375,10 +374,8 @@ public class RedRightTrajectoryAuto extends LinearOpMode {
         robot.intake.setPower(0);
     }
 
-    public void moveArm (double power, int milliseconds) throws InterruptedException {
+    public void moveArm (double power) {
         robot.arm.setPower(power);
-        sleep(milliseconds);
-        robot.arm.setPower(0);
     }
 
 }   // end class

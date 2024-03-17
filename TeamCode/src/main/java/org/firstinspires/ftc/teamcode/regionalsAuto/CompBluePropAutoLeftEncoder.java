@@ -27,7 +27,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.regionalsAuto;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -38,6 +38,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.firstinspires.ftc.teamcode.hardwaremap;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 
@@ -50,9 +51,9 @@ import java.util.List;
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list.
  */
-@Autonomous(name = "CompBluePropAuto - RIGHT ENC")
+@Autonomous(name = "CompBluePropAuto - LEFT ENC")
 //@Disabled
-public class CompBluePropAutoRightEncoder extends LinearOpMode {
+public class CompBluePropAutoLeftEncoder extends LinearOpMode {
 
     private hardwaremap robot;
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
@@ -131,15 +132,18 @@ public class CompBluePropAutoRightEncoder extends LinearOpMode {
                     driveForward(0.2, 28);
                     driveRotate(0.4, -20);
                     intakeOpenOrClose(1, 1500);
-                    driveForward(0.2, -2);
-//                        moveArm(0.4, -5);
-//                        driveForward(0.2, -34);
-//                        driveStrafeRightorLeft(0.2, -4);
-//                        sleep(100);
-//                        moveArm(0.3, -10);
-//                        intakeOpenOrClose(1, 1500);
-//                        moveArm(0.3, 10);
-//                        driveStrafeRightorLeft(0.2, -20);
+                    moveArm(0.4, -5);
+                    driveStrafeRightorLeft(0.2, 10);
+                    driveForward(0.2, 33);
+                    driveRotate(0.3, 38);
+                    driveForward(0.2, -3);
+                    driveStrafeRightorLeft(0.2, 4);
+                    moveArm(0.4, -10);
+                    sleep(100);
+                    intakeOpenOrClose(1, 1500);
+                    moveArm(0.4, 16);
+                    driveStrafeRightorLeft(0.2, -17);
+
 
                     break;
 
@@ -156,16 +160,15 @@ public class CompBluePropAutoRightEncoder extends LinearOpMode {
                     driveRotate(0.4, 20);
                     intakeOpenOrClose(1, 1500);
                     driveForward(0.2, -2);
-//                        moveArm(0.4, -5);
-//                        driveStrafeRightorLeft(0.2, -10);
-//                        driveForward(0.2, 33);
-//                        driveRotate(0.3, 38);
-//                        driveForward(0.2, -5);
-//                        moveArm(0.4, -10);
-//                        sleep(100);
-//                        intakeOpenOrClose(1, 1500);
-//                        moveArm(0.4, 10);
-//                        driveStrafeRightorLeft(0.2, 17);
+                    moveArm(0.4, -5);
+                    driveStrafeRightorLeft(0.2, 6);
+                    driveForward(0.2, -33);
+                    moveArm(0.4, -10);
+                    sleep(100);
+                    intakeOpenOrClose(1, 1500);
+                    moveArm(0.4, 16);
+                    driveStrafeRightorLeft(0.2, 17);
+
 
                     break;
 
@@ -179,17 +182,17 @@ public class CompBluePropAutoRightEncoder extends LinearOpMode {
                     driveForward(0.2, 28);
                     intakeOpenOrClose(1, 1500);
                     driveForward(0.2, -1);
-//                        driveRotate(0.4, 20);
-//                        moveArm(0.4, -5);
-//                        driveForward(0.2, 33);
-//                        driveRotate(0.3, 38);
-//                        driveForward(0.2, -2);
-//                        driveStrafeRightorLeft(0.2, -2);
-//                        moveArm(0.4, -10);
-//                        sleep(100);
-//                        intakeOpenOrClose(1, 1500);
-//                        moveArm(0.4, 10);
-//                        driveStrafeRightorLeft(0.2, -20);
+                    driveRotate(0.4, -20);
+                    moveArm(0.4, -5);
+                    driveForward(0.2, 33);
+                    driveRotate(0.3, 38);
+                    driveForward(0.2, -2);
+                    driveStrafeRightorLeft(0.2, 6);
+                    moveArm(0.4, -10);
+                    sleep(100);
+                    intakeOpenOrClose(1, 1500);
+                    moveArm(0.4, 16);
+                    driveStrafeRightorLeft(0.2, 20);
 
 
                     break;

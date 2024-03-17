@@ -27,17 +27,16 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.qualifiersAuto;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.firstinspires.ftc.teamcode.hardwaremap;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 
@@ -50,16 +49,16 @@ import java.util.List;
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list.
  */
-@Autonomous(name = "CompRedPropAuto - RIGHT ENC")
+@Autonomous(name = "CompBluePropAuto - TAPE LEFT")
 //@Disabled
-public class CompRedPropAutoRightEncoder extends LinearOpMode {
+public class CompBluePropAutoTapeLeft extends LinearOpMode {
 
     private hardwaremap robot;
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
 
     // TFOD_MODEL_ASSET points to a model file stored in the project Asset location,
     // this is only used for Android Studio when using models in Assets.
-    private static final String TFOD_MODEL_ASSET = "RedPropModel.tflite";
+    private static final String TFOD_MODEL_ASSET = "BluePropModel.tflite";
     // TFOD_MODEL_FILE points to a model file stored onboard the Robot Controller's storage,
     // this is used when uploading models directly to the RC using the model upload interface.
     private static final String TFOD_MODEL_FILE = "/sdcard/FIRST/tflitemodels/myCustomModel.tflite";
@@ -78,13 +77,10 @@ public class CompRedPropAutoRightEncoder extends LinearOpMode {
      */
     private VisionPortal visionPortal;
 
-    private final double circumference = Math.PI * 2.95;
-    private final double ticks = 560;
-
     public boolean pixelDetected;
     public int condition = 1;
-    public double x = -1;
-    public double y = -1;
+    double x;
+    double y;
 
     @Override
     public void runOpMode() {
@@ -99,103 +95,261 @@ public class CompRedPropAutoRightEncoder extends LinearOpMode {
         telemetry.addData("DS preview on/off", "3 dots, Camera Stream");
         telemetry.addData(">", "Touch Play to start OpMode");
         telemetry.update();
-
-        while (opModeInInit())
-        {
-            telemetryTfod();
-            if (0 <= x && x <= 213)
-            {
-                condition = 2;
-            } else if (x >= 426) {
-                condition = 3;
-            } else {
-                condition = 1;
-            }
-
-            telemetry.addData("Condition", condition);
-            telemetry.update();
-        }
         waitForStart();
 
         if (opModeIsActive()) {
             while (opModeIsActive()) {
 
+                telemetryTfod();
 
+                // Push telemetry to the Driver Station.
+                telemetry.update();
 
-                    if (condition == 2)
+                if (pixelDetected) {
+
+                    if (0 <= x && x <= 213)
                     {
+                        condition = 2;
                         telemetry.addLine("Pixel detected");
                         telemetry.addData("Condition", condition);
                         telemetry.update();
 
-                        driveForward(0.2, 28);
-                        driveRotate(0.4, -20);
-                        intakeOpenOrClose(1, 1500);
-                        moveArm(0.4, -5);
-                        driveForward(0.2, -34);
-                        driveStrafeRightorLeft(0.2, -4);
-                        sleep(100);
-                        moveArm(0.3, -13);
-                        intakeOpenOrClose(1, 1500);
-                        moveArm(0.3, 10);
-                        driveStrafeRightorLeft(0.2, -20);
+                        drive(0.2);
+                        sleep(4700);
+                        drive(0);
+                        sleep(750);
+
+
+
+                        driveRot(0.5);
+                        sleep(900);
+
+                        drive(0);
+                        sleep(750);
+
+//                        drive(0.2);
+//                        sleep(500);
+
+
+
+                        intakeOpenOrClose(1, 3000);
+
+                        drive(0);
+                        sleep(500);
+
+                        drive(-0.2);
+                        sleep(300);
+
+                        drive(0);
+                        sleep(500);
+
+                        driveRot(-0.5);
+                        sleep(900);
+
+                        //stop
+                        drive(0);
+                        sleep(500);
+
+                        //forward
+
+                        drive(0.2);
+                        sleep(3500);
+
+                        drive(0);
+                        sleep(500);
+
+                        driveRot(0.5);
+                        sleep(1000);
+
+                        drive(0);
+                        sleep(500);
+
+                        drive(0.5);
+                        sleep(2000);
+
+                        //stop
+                        drive(0);
+//                        sleep(1000);
+//
+//                        driveRot(0.5);
+//                        sleep(1900);
+//
+//                        drive(0);
+//                        sleep(1000);
+//
+//                        drive(0.2);
+//                        sleep(5000);
+//
+//                        drive(0);
 
                         break;
 
 
                     }
 
-                    if (condition == 3)
+                    if (x >= 426)
                     {
+                        condition = 3;
                         telemetry.addLine("Pixel detected");
                         telemetry.addData("Condition", condition);
                         telemetry.update();
 
-                        driveForward(0.2, 28);
-                        driveRotate(0.4, 20);
-                        intakeOpenOrClose(1, 1500);
-                        driveForward(0.2, -2);
-                        moveArm(0.4, -5);
-                        driveStrafeRightorLeft(0.2, -10);
-                        driveForward(0.2, 33);
-                        driveRotate(0.3, 38);
-                        driveForward(0.2, -5);
-                        moveArm(0.4, -13);
-                        sleep(100);
-                        intakeOpenOrClose(1, 1500);
-                        moveArm(0.4, 10);
-                        driveStrafeRightorLeft(0.2, 17);
+                        drive(0.2);
+                        sleep(4700);
+                        drive(0);
+                        sleep(1000);
+
+                        drive(0);
+                        sleep(1000);
+
+                        driveRot(-0.5);
+                        sleep(900);
+
+                        drive(0);
+                        sleep(1000);
+
+                        intakeOpenOrClose(1, 3000);
+
+                        drive(0);
+                        sleep(1000);
+
+                        drive(-0.2);
+                        sleep(200);
+
+                        drive(0);
+                        sleep(1000);
+
+                        driveRot(0.5);
+                        sleep(1900);
+
+                        drive(0);
+                        sleep(1000);
+
+                        drive(0.2);
+                        sleep(8000);
+
+
+
+
+
+                        drive(0);
+//                        sleep(1000);
+//
+//                        driveRot(-0.5);
+//                        sleep(900);
+//
+//                        drive(0);
+//                        sleep(1000);
+//
+//                        drive(0.2);
+//                        sleep(2000);
+//
+//                        drive(0);
+//                        sleep(1000);
+//
+//                        driveRot(0.5);
+//                        sleep(900);
+
+//                        drive(0);
+//                        sleep(1000);
+//
+//                        drive(0.2);
+//                        sleep(8000);
+//
+//                        //stop
+//                        drive(0);
 
                         break;
 
                     }
 
                     if (condition == 1) {
-
                         telemetry.addLine("Pixel detected");
                         telemetry.addData("Condition", condition);
                         telemetry.update();
-                        driveForward(0.2, 28);
-                        intakeOpenOrClose(1, 1500);
-                        driveForward(0.2, -1);
-                        driveRotate(0.4, 20);
-                        moveArm(0.4, -5);
-                        driveForward(0.2, 33);
-                        driveRotate(0.3, 38);
-                        driveForward(0.2, -2);
-                        driveStrafeRightorLeft(0.2, -2);
-                        moveArm(0.4, -10);
-                        sleep(100);
-                        intakeOpenOrClose(1, 1500);
-                        moveArm(0.4, 13);
-                        driveStrafeRightorLeft(0.2, -20);
 
+                        drive(0.2);
+                        sleep(4700);
+                        drive(0);
+                        sleep(1000);
+
+                        //forward
+//                        drive(0.2);
+//                        sleep(1100);
+
+                        //stop
+                        drive(0);
+                        sleep(1000);
+
+                        //deposits pixel
+                        intakeOpenOrClose(1, 3000);
+
+                        //stop
+                        drive(0);
+                        sleep(1000);
+
+                        //backward
+                        drive(-0.2);
+                        sleep(500);
+
+                        drive(0);
+                        sleep(1000);
+
+                        //rotate
+                        driveRot(0.5);
+                        sleep(900);
+
+                        //stop
+                        drive(0);
+                        sleep(1000);
+
+                        //forward
+                        drive(0.2);
+                        sleep(6000);
+
+                        //stop
+                        drive(0);
+//                        sleep(1000);
+//
+//                        //rotate
+//                        driveRot(-0.5);
+//                        sleep(900);
+//
+//                        //stop
+//                        drive(0);
+//                        sleep(1000);
+//
+//                        //forward
+//                        drive(0.2);
+//                        sleep(6000);
+//
+//                        //stop
+//                        drive(0);
+//                        sleep(1000);
+//
+//                        //rotate
+//                        driveRot(0.5);
+//                        sleep(1800);
+//
+//                        //stop
+//                        drive(0);
+//                        sleep(1000);
+//
+//                        //arm up
+//                    moveArm(-0.7);
+//                    sleep(800);
+//
+//                    drive(-0.3);
+//                    sleep(200);
+//
+//
+//                    intakeOpenOrClose(1, 5000);
 
                         break;
 
 
                     }
-
+                }
 
                 // Save CPU resources; can resume streaming when needed.
                 if (gamepad1.dpad_down) {
@@ -284,7 +438,7 @@ public class CompRedPropAutoRightEncoder extends LinearOpMode {
     private void telemetryTfod() {
 
         List<Recognition> currentRecognitions = tfod.getRecognitions();
-        //telemetry.addData("# Objects Detected", currentRecognitions.size());
+        telemetry.addData("# Objects Detected", currentRecognitions.size());
 
         // Step through the list of recognitions and display info for each one.
         for (Recognition recognition : currentRecognitions) {
@@ -296,10 +450,10 @@ public class CompRedPropAutoRightEncoder extends LinearOpMode {
                 pixelDetected = true;
             }
 
-//            telemetry.addData(""," ");
-//            telemetry.addData("Image", "%s (%.0f %% Conf.)", recognition.getLabel(), recognition.getConfidence() * 100);
-//            telemetry.addData("- Position", "%.0f / %.0f", x, y);
-//            telemetry.addData("- Size", "%.0f x %.0f", recognition.getWidth(), recognition.getHeight());
+            telemetry.addData(""," ");
+            telemetry.addData("Image", "%s (%.0f %% Conf.)", recognition.getLabel(), recognition.getConfidence() * 100);
+            telemetry.addData("- Position", "%.0f / %.0f", x, y);
+            telemetry.addData("- Size", "%.0f x %.0f", recognition.getWidth(), recognition.getHeight());
         }   // end for() loop
 
     }   // end method telemetryTfod()
@@ -324,178 +478,8 @@ public class CompRedPropAutoRightEncoder extends LinearOpMode {
         robot.intake.setPower(0);
     }
 
-
-
-    public void driveForward(double power, double distance) {
-        //reset encoders
-        robot.leftFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.leftBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.rightFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.rightBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        //rotations needed given a distance
-        double rotationsNeeded = distance / circumference;
-
-        //ticks
-        int encoderTarget = (int) (rotationsNeeded * ticks);
-
-
-        //set target position of encoders
-        robot.leftFrontDrive.setTargetPosition(encoderTarget);
-        robot.leftBackDrive.setTargetPosition(encoderTarget);
-        robot.rightFrontDrive.setTargetPosition(encoderTarget);
-        robot.rightBackDrive.setTargetPosition(encoderTarget);
-
-        //to reverse, set encoder target to negative
-        //to strafe set 2 motors to negative encoder target
-
-        //set power
-        robot.leftFrontDrive.setPower(power);
-        robot.leftBackDrive.setPower(power);
-        robot.rightFrontDrive.setPower(power);
-        robot.rightBackDrive.setPower(power);
-
-//        for (DcMotor motor : robot.drivetrain) {
-//            motor.setPower(power);
-//        }
-
-
-        //run to position
-        robot.leftFrontDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.leftBackDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.rightFrontDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.rightBackDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        while (robot.leftFrontDrive.isBusy() || robot.rightFrontDrive.isBusy()) {
-
-        }
-
-
-    }
-
-
-    public void driveStrafeRightorLeft(double power, double distance) {
-        //reset encoders
-        robot.leftFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.leftBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.rightFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.rightBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        //rotations needed given a distance
-        double rotationsNeeded = distance / circumference;
-
-        //ticks
-        int encoderTarget = (int) (rotationsNeeded * ticks);
-
-        //set target position
-        robot.leftFrontDrive.setTargetPosition(-encoderTarget);
-        robot.leftBackDrive.setTargetPosition(encoderTarget);
-        robot.rightFrontDrive.setTargetPosition(encoderTarget);
-        robot.rightBackDrive.setTargetPosition(-encoderTarget);
-
-
-        //set power
-        robot.leftFrontDrive.setPower(power);
-        robot.leftBackDrive.setPower(power);
-        robot.rightFrontDrive.setPower(power);
-        robot.rightBackDrive.setPower(power);
-
-//        for (DcMotor motor : robot.drivetrain) {
-//            motor.setPower(power);
-//        }
-
-        //run to position
-        robot.leftFrontDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.leftBackDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.rightFrontDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.rightBackDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        while (robot.leftFrontDrive.isBusy() || robot.rightFrontDrive.isBusy()) {
-
-        }
-    }
-
-    public void driveRotate(double power, double distance){
-        //reset encoders
-        robot.leftBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.rightBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.leftFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.rightFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        //rotations needed given a distance
-        double rotationsNeeded = distance / circumference;
-
-        //ticks
-        int encoderTarget = (int)(rotationsNeeded * ticks);
-
-        //set target position
-        robot.leftBackDrive.setTargetPosition(encoderTarget);
-        robot.rightBackDrive.setTargetPosition(-encoderTarget);
-        robot.leftFrontDrive.setTargetPosition(encoderTarget);
-        robot.rightFrontDrive.setTargetPosition(-encoderTarget);
-
-        //to reverse, set encoder target to negative
-        //to strafe set 2 motors to negative encoder target
-
-        //set power
-        robot.leftBackDrive.setPower(power);
-        robot.rightBackDrive.setPower(power);
-        robot.leftFrontDrive.setPower(power);
-        robot.rightFrontDrive.setPower(power);
-
-//        for (DcMotor motor : robot.drivetrain) {
-//            motor.setPower(power);
-//        }
-
-        //run to position
-        robot.leftBackDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.rightBackDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.leftFrontDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.rightFrontDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        while (robot.leftFrontDrive.isBusy() || robot.rightFrontDrive.isBusy()) {
-
-        }
-
-    }
-
-    public void moveArm(double power, double distance) {
-        //reset encoders
-        robot.arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        //rotations needed given a distance
-        double rotationsNeeded = distance / circumference;
-
-        //ticks
-        int encoderTarget = (int) (rotationsNeeded * ticks);
-
-
-        //set target position of encoders
-
-        robot.arm.setTargetPosition(encoderTarget);
-
-        //to reverse, set encoder target to negative
-        //to strafe set 2 motors to negative encoder target
-
-        //set power
-
+    public void moveArm (double power) {
         robot.arm.setPower(power);
-
-//        for (DcMotor motor : robot.drivetrain) {
-//            motor.setPower(power);
-//        }
-
-
-        //run to position
-        robot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        while (robot.arm.isBusy()) {
-
-        }
-
-
     }
-
-
 
 }   // end class

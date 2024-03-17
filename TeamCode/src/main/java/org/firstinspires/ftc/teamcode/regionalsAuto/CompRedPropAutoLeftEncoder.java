@@ -27,27 +27,20 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode;
-
-import static java.lang.Thread.sleep;
+package org.firstinspires.ftc.teamcode.regionalsAuto;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
+
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.firstinspires.ftc.teamcode.hardwaremap;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
-
-import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-
-import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
 import java.util.List;
 
@@ -58,16 +51,16 @@ import java.util.List;
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list.
  */
-@Autonomous(name = "BlueTrajectoryAuto - LEFT")
+@Autonomous(name = "CompRedPropAuto - LEFT ENC")
 //@Disabled
-public class BlueLeftTrajectoryAuto extends LinearOpMode {
+public class CompRedPropAutoLeftEncoder extends LinearOpMode {
 
     private hardwaremap robot;
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
 
     // TFOD_MODEL_ASSET points to a model file stored in the project Asset location,
     // this is only used for Android Studio when using models in Assets.
-    private static final String TFOD_MODEL_ASSET = "BluePropModel.tflite";
+    private static final String TFOD_MODEL_ASSET = "RedPropModel.tflite";
     // TFOD_MODEL_FILE points to a model file stored onboard the Robot Controller's storage,
     // this is used when uploading models directly to the RC using the model upload interface.
     private static final String TFOD_MODEL_FILE = "/sdcard/FIRST/tflitemodels/myCustomModel.tflite";
@@ -86,159 +79,125 @@ public class BlueLeftTrajectoryAuto extends LinearOpMode {
      */
     private VisionPortal visionPortal;
 
+    private final double circumference = Math.PI * 2.95;
+    private final double ticks = 560;
+
     public boolean pixelDetected;
     public int condition = 1;
-    double x;
-    double y;
+    public double x = -1;
+    public double y = -1;
 
     @Override
-    public void runOpMode() throws InterruptedException {
-
+    public void runOpMode() {
 
         robot = new hardwaremap();
         robot.init(hardwareMap);
         initTfod();
-        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
-        Trajectory center1 = drive.trajectoryBuilder(new Pose2d(0, 0, 0))
-                .forward(28)
-                .build();
-
-        Trajectory center2 = drive.trajectoryBuilder(center1.end())
-                .back(5)
-                .build();
-
-        Trajectory center3 = drive.trajectoryBuilder(center2.end().plus(new Pose2d(0, 0, Math.toRadians(-90))), false)
-                .back(28)
-                .build();
-
-        Trajectory left1 = drive.trajectoryBuilder(new Pose2d(0, 0, 0))
-                .forward(28)
-                .build();
-
-        Trajectory left2 = drive.trajectoryBuilder(left1.end().plus(new Pose2d(0, 0, Math.toRadians(90))), false)
-                .strafeLeft(5)
-                .build();
-
-        Trajectory left3 = drive.trajectoryBuilder(left2.end())
-                .forward(38)
-                .build();
-
-        Trajectory left4 = drive.trajectoryBuilder(left3.end())
-                .strafeRight(5)
-                .build();
-
-        Trajectory right1 = drive.trajectoryBuilder(new Pose2d(0, 0, 0))
-                .forward(28)
-                .build();
-
-        Trajectory right2 = drive.trajectoryBuilder(right1.end().plus(new Pose2d(0, 0, Math.toRadians(-90))), false)
-                .back(28)
-                .build();
-
+        robot.init(hardwareMap);
 
         // Wait for the DS start button to be touched.
         telemetry.addData("DS preview on/off", "3 dots, Camera Stream");
         telemetry.addData(">", "Touch Play to start OpMode");
         telemetry.update();
+
+        while (opModeInInit())
+        {
+            telemetryTfod();
+            if (0 <= x && x <= 213)
+            {
+                condition = 2;
+            } else if (x >= 426) {
+                condition = 3;
+            } else {
+                condition = 1;
+            }
+
+            telemetry.addData("Condition", condition);
+            telemetry.update();
+        }
         waitForStart();
 
         if (opModeIsActive()) {
             while (opModeIsActive()) {
 
-                telemetryTfod();
 
-                // Push telemetry to the Driver Station.
-                telemetry.update();
 
-                if (pixelDetected) {
-
-                    if (0 <= x && x <= 213)
+                    if (condition == 2)
                     {
-                        condition = 2;
                         telemetry.addLine("Pixel detected");
                         telemetry.addData("Condition", condition);
                         telemetry.update();
 
-                        drive.followTrajectory(left1);
-                        sleep(500);
-                        drive.turn(Math.toRadians(90));
-                        sleep(500);
-                        drive.intakeOpenOrClose(1, 3000);
-                        sleep(500);
-                        drive.followTrajectory(left2);
-                        sleep(500);
-                        drive.followTrajectory(left3);
-                        sleep(500);
-                        drive.followTrajectory(left4);
-                        sleep(500);
-                        drive.turn(Math.toRadians(180));
-                        sleep(500);
-                        drive.moveArm(0.5, 4000);
-                        sleep(500);
-                        drive.intakeOpenOrClose(1, 3000);
-                        sleep(500);
-                        drive.moveArm(-0.5, 1000);
-                        drive.moveArm(0.2, 250);
+                        driveForward(0.2, 28);
+                        driveRotate(0.4, -20);
+                        intakeOpenOrClose(1, 1500);
+                        driveForward(0.2, -2);
+//                        moveArm(0.4, -5);
+//                        driveForward(0.2, -34);
+//                        driveStrafeRightorLeft(0.2, -4);
+//                        sleep(100);
+//                        moveArm(0.3, -10);
+//                        intakeOpenOrClose(1, 1500);
+//                        moveArm(0.3, 10);
+//                        driveStrafeRightorLeft(0.2, -20);
 
                         break;
 
 
                     }
 
-                    if (x >= 426)
+                    if (condition == 3)
                     {
-                        condition = 3;
                         telemetry.addLine("Pixel detected");
                         telemetry.addData("Condition", condition);
                         telemetry.update();
 
-                        drive.followTrajectory(right1);
-                        sleep(500);
-                        drive.turn(Math.toRadians(-90));
-                        sleep(500);
-                        drive.intakeOpenOrClose(1, 3000);
-                        sleep(500);
-                        drive.followTrajectory(right2);
-                        sleep(500);
-                        drive.moveArm(0.5, 4000);
-                        sleep(500);
-                        drive.intakeOpenOrClose(1, 3000);
-                        sleep(500);
-                        drive.moveArm(-0.5, 1000);
-                        drive.moveArm(0.2, 250);
+                        driveForward(0.2, 28);
+                        driveRotate(0.4, 20);
+                        intakeOpenOrClose(1, 1500);
+                        driveForward(0.2, -2);
+//                        moveArm(0.4, -5);
+//                        driveStrafeRightorLeft(0.2, -10);
+//                        driveForward(0.2, 33);
+//                        driveRotate(0.3, 38);
+//                        driveForward(0.2, -5);
+//                        moveArm(0.4, -10);
+//                        sleep(100);
+//                        intakeOpenOrClose(1, 1500);
+//                        moveArm(0.4, 10);
+//                        driveStrafeRightorLeft(0.2, 17);
 
                         break;
 
                     }
 
                     if (condition == 1) {
+
                         telemetry.addLine("Pixel detected");
                         telemetry.addData("Condition", condition);
                         telemetry.update();
+                        driveForward(0.2, 28);
+                        intakeOpenOrClose(1, 1500);
+                        driveForward(0.2, -1);
+//                        driveRotate(0.4, 20);
+//                        moveArm(0.4, -5);
+//                        driveForward(0.2, 33);
+//                        driveRotate(0.3, 38);
+//                        driveForward(0.2, -2);
+//                        driveStrafeRightorLeft(0.2, -2);
+//                        moveArm(0.4, -10);
+//                        sleep(100);
+//                        intakeOpenOrClose(1, 1500);
+//                        moveArm(0.4, 10);
+//                        driveStrafeRightorLeft(0.2, -20);
 
-                        drive.followTrajectory(center1);
-                        sleep(500);
-                        drive.intakeOpenOrClose(1, 3000);
-                        sleep(500);
-                        drive.followTrajectory(center2);
-                        sleep(500);
-                        drive.turn(Math.toRadians(-90));
-                        sleep(500);
-                        drive.followTrajectory(center3);
-                        sleep(500);
-                        drive.moveArm(0.5, 4000);
-                        sleep(500);
-                        drive.intakeOpenOrClose(1, 3000);
-                        sleep(500);
-                        drive.moveArm(-0.5, 1000);
-                        drive.moveArm(0.2, 250);
 
                         break;
 
 
                     }
-                }
+
 
                 // Save CPU resources; can resume streaming when needed.
                 if (gamepad1.dpad_down) {
@@ -327,7 +286,7 @@ public class BlueLeftTrajectoryAuto extends LinearOpMode {
     private void telemetryTfod() {
 
         List<Recognition> currentRecognitions = tfod.getRecognitions();
-        telemetry.addData("# Objects Detected", currentRecognitions.size());
+        //telemetry.addData("# Objects Detected", currentRecognitions.size());
 
         // Step through the list of recognitions and display info for each one.
         for (Recognition recognition : currentRecognitions) {
@@ -339,10 +298,10 @@ public class BlueLeftTrajectoryAuto extends LinearOpMode {
                 pixelDetected = true;
             }
 
-            telemetry.addData(""," ");
-            telemetry.addData("Image", "%s (%.0f %% Conf.)", recognition.getLabel(), recognition.getConfidence() * 100);
-            telemetry.addData("- Position", "%.0f / %.0f", x, y);
-            telemetry.addData("- Size", "%.0f x %.0f", recognition.getWidth(), recognition.getHeight());
+//            telemetry.addData(""," ");
+//            telemetry.addData("Image", "%s (%.0f %% Conf.)", recognition.getLabel(), recognition.getConfidence() * 100);
+//            telemetry.addData("- Position", "%.0f / %.0f", x, y);
+//            telemetry.addData("- Size", "%.0f x %.0f", recognition.getWidth(), recognition.getHeight());
         }   // end for() loop
 
     }   // end method telemetryTfod()
@@ -367,10 +326,178 @@ public class BlueLeftTrajectoryAuto extends LinearOpMode {
         robot.intake.setPower(0);
     }
 
-    public void moveArm (double power, int milliseconds) throws InterruptedException {
-        robot.arm.setPower(power);
-        sleep(milliseconds);
-        robot.arm.setPower(0);
+
+
+    public void driveForward(double power, double distance) {
+        //reset encoders
+        robot.leftFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.leftBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.rightFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.rightBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        //rotations needed given a distance
+        double rotationsNeeded = distance / circumference;
+
+        //ticks
+        int encoderTarget = (int) (rotationsNeeded * ticks);
+
+
+        //set target position of encoders
+        robot.leftFrontDrive.setTargetPosition(encoderTarget);
+        robot.leftBackDrive.setTargetPosition(encoderTarget);
+        robot.rightFrontDrive.setTargetPosition(encoderTarget);
+        robot.rightBackDrive.setTargetPosition(encoderTarget);
+
+        //to reverse, set encoder target to negative
+        //to strafe set 2 motors to negative encoder target
+
+        //set power
+        robot.leftFrontDrive.setPower(power);
+        robot.leftBackDrive.setPower(power);
+        robot.rightFrontDrive.setPower(power);
+        robot.rightBackDrive.setPower(power);
+
+//        for (DcMotor motor : robot.drivetrain) {
+//            motor.setPower(power);
+//        }
+
+
+        //run to position
+        robot.leftFrontDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.leftBackDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.rightFrontDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.rightBackDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        while (robot.leftFrontDrive.isBusy() || robot.rightFrontDrive.isBusy()) {
+
+        }
+
+
     }
+
+
+    public void driveStrafeRightorLeft(double power, double distance) {
+        //reset encoders
+        robot.leftFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.leftBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.rightFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.rightBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        //rotations needed given a distance
+        double rotationsNeeded = distance / circumference;
+
+        //ticks
+        int encoderTarget = (int) (rotationsNeeded * ticks);
+
+        //set target position
+        robot.leftFrontDrive.setTargetPosition(-encoderTarget);
+        robot.leftBackDrive.setTargetPosition(encoderTarget);
+        robot.rightFrontDrive.setTargetPosition(encoderTarget);
+        robot.rightBackDrive.setTargetPosition(-encoderTarget);
+
+
+        //set power
+        robot.leftFrontDrive.setPower(power);
+        robot.leftBackDrive.setPower(power);
+        robot.rightFrontDrive.setPower(power);
+        robot.rightBackDrive.setPower(power);
+
+//        for (DcMotor motor : robot.drivetrain) {
+//            motor.setPower(power);
+//        }
+
+        //run to position
+        robot.leftFrontDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.leftBackDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.rightFrontDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.rightBackDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        while (robot.leftFrontDrive.isBusy() || robot.rightFrontDrive.isBusy()) {
+
+        }
+    }
+
+    public void driveRotate(double power, double distance){
+        //reset encoders
+        robot.leftBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.rightBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.leftFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.rightFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        //rotations needed given a distance
+        double rotationsNeeded = distance / circumference;
+
+        //ticks
+        int encoderTarget = (int)(rotationsNeeded * ticks);
+
+        //set target position
+        robot.leftBackDrive.setTargetPosition(encoderTarget);
+        robot.rightBackDrive.setTargetPosition(-encoderTarget);
+        robot.leftFrontDrive.setTargetPosition(encoderTarget);
+        robot.rightFrontDrive.setTargetPosition(-encoderTarget);
+
+        //to reverse, set encoder target to negative
+        //to strafe set 2 motors to negative encoder target
+
+        //set power
+        robot.leftBackDrive.setPower(power);
+        robot.rightBackDrive.setPower(power);
+        robot.leftFrontDrive.setPower(power);
+        robot.rightFrontDrive.setPower(power);
+
+//        for (DcMotor motor : robot.drivetrain) {
+//            motor.setPower(power);
+//        }
+
+        //run to position
+        robot.leftBackDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.rightBackDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.leftFrontDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.rightFrontDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        while (robot.leftFrontDrive.isBusy() || robot.rightFrontDrive.isBusy()) {
+
+        }
+
+    }
+
+    public void moveArm(double power, double distance) {
+        //reset encoders
+        robot.arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        //rotations needed given a distance
+        double rotationsNeeded = distance / circumference;
+
+        //ticks
+        int encoderTarget = (int) (rotationsNeeded * ticks);
+
+
+        //set target position of encoders
+
+        robot.arm.setTargetPosition(encoderTarget);
+
+        //to reverse, set encoder target to negative
+        //to strafe set 2 motors to negative encoder target
+
+        //set power
+
+        robot.arm.setPower(power);
+
+//        for (DcMotor motor : robot.drivetrain) {
+//            motor.setPower(power);
+//        }
+
+
+        //run to position
+        robot.arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        while (robot.arm.isBusy()) {
+
+        }
+
+
+    }
+
+
 
 }   // end class
