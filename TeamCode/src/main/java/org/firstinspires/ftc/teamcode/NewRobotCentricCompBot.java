@@ -139,14 +139,24 @@ public class NewRobotCentricCompBot extends LinearOpMode {
                 robot.arm.setPower(0);
             }
 
-            if (gamepad2.x)
+            if (gamepad1.x)
             {
                 robot.drone.setPosition(0);
             }
 
-            if (gamepad2.y)
+            if (gamepad1.y)
             {
                 robot.drone.setPosition(1);
+            }
+
+            if (gamepad2.x)
+            {
+                robot.intakeWrist.setPosition(0);
+            }
+
+            if (gamepad2.y)
+            {
+                robot.intakeWrist.setPosition(1);
             }
 
 
@@ -160,6 +170,7 @@ public class NewRobotCentricCompBot extends LinearOpMode {
             telemetry.addData("Intake Power", robot.intake.getPower());
             telemetry.addData("Suspension Power", robot.suspension.getPower());
             telemetry.addData("Drone Position: ", robot.drone.getPosition());
+            telemetry.addData("Intake Wrist Position: ", robot.intakeWrist.getPosition());
             //telemetry.addData("Front left/Right", "%4.2f, %4.2f", leftFrontPower, rightFrontPower);
             //telemetry.addData("Back  left/Right", "%4.2f, %4.2f", leftBackPower, rightBackPower);
             //telemetry.addData("Lift power: ", Range.clip(gamepad2.right_stick_y, -1, 1));

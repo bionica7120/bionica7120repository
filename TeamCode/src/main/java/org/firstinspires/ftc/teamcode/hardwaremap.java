@@ -22,6 +22,7 @@ public class hardwaremap {
     public DcMotor intake;
     public DcMotor suspension;
     public Servo drone;
+    public Servo intakeWrist;
     public IMU imu;
 
     public void init(HardwareMap hwMap) {
@@ -83,6 +84,10 @@ public class hardwaremap {
 
         //drone
         drone = hwMap.get(Servo.class, "drone");
+
+        //intakeWrist
+        intakeWrist = hwMap.get(Servo.class, "intakeWrist");
+
 
 
         //field centric stuff

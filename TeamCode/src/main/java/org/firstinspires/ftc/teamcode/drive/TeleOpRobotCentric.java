@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
  * This opmode is essentially just LocalizationTest.java with a few additions and comments.
  */
 @TeleOp(group = "advanced")
-public class TeleOpDrive extends LinearOpMode {
+public class TeleOpRobotCentric extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         // Initialize SampleMecanumDrive
