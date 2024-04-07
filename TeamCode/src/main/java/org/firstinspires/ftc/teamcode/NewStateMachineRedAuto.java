@@ -29,21 +29,14 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import com.acmerobotics.roadrunner.localization.Localizer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
-import org.firstinspires.ftc.teamcode.hardwaremap;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 
@@ -58,7 +51,7 @@ import java.util.List;
  */
 @Autonomous(name = "CompRedPropAuto - LEFT ENC")
 //@Disabled
-public class StateMachineTensor extends LinearOpMode {
+public class NewStateMachineRedAuto extends LinearOpMode {
     hardwaremap robot = new hardwaremap();
     private static final boolean USE_WEBCAM = true;
     private static final String TFOD_MODEL_ASSET = "RedPropModel.tflite";
@@ -114,7 +107,7 @@ public class StateMachineTensor extends LinearOpMode {
 
     // The liftState variable is declared out here
     // so its value persists between loop() calls
-    StateMachineTensor.RobotState robotState = StateMachineTensor.RobotState.LIFT_START;
+    NewStateMachineRedAuto.RobotState robotState = NewStateMachineRedAuto.RobotState.LIFT_START;
 
     // Some hardware access boilerplate; these would be initialized in init()
 
@@ -243,14 +236,14 @@ public class StateMachineTensor extends LinearOpMode {
                         break;
                     default:
                         // should never be reached, as liftState should never be null
-                        robotState = StateMachineTensor.RobotState.LIFT_START;
+                        robotState = NewStateMachineRedAuto.RobotState.LIFT_START;
                 }
 
                 // small optimization, instead of repeating ourselves in each
                 // lift state case besides LIFT_START for the cancel action,
                 // it's just handled here
-                if (gamepad1.y && robotState != StateMachineTensor.RobotState.LIFT_START) {
-                    robotState = StateMachineTensor.RobotState.LIFT_START;
+                if (gamepad1.y && robotState != NewStateMachineRedAuto.RobotState.LIFT_START) {
+                    robotState = NewStateMachineRedAuto.RobotState.LIFT_START;
                 }
 
                 // mecanum drive code goes here
