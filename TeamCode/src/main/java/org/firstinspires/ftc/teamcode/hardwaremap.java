@@ -3,10 +3,13 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.hardware.motors.RevRoboticsUltraPlanetaryHdHexMotor;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
+
+import org.firstinspires.ftc.teamcode.util.Encoder;
 
 public class hardwaremap {
 
@@ -18,12 +21,13 @@ public class hardwaremap {
     public DcMotor leftBackDrive;
     public DcMotor rightFrontDrive;
     public DcMotor rightBackDrive;
-    public DcMotor arm;
+    public DcMotorEx arm;
     public DcMotor intake;
-    public DcMotor suspension;
+    public DcMotorEx suspension;
     public Servo drone;
     public Servo intakeWrist;
     public IMU imu;
+    public Encoder parallelEncoder, perpendicularEncoder;
 
     public void init(HardwareMap hwMap) {
 
@@ -60,18 +64,18 @@ public class hardwaremap {
         rightBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         //arm
-        arm = hwMap.get(DcMotor.class, "arm");
-        arm.setDirection(DcMotor.Direction.FORWARD);
+        arm = hwMap.get(DcMotorEx.class, "arm");
+        arm.setDirection(DcMotorEx.Direction.FORWARD);
         arm.setPower(0);
-        arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        arm.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        arm.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
         //arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         //suspension
-        suspension = hwMap.get(DcMotor.class, "suspension");
-        suspension.setDirection(DcMotor.Direction.FORWARD);
+        suspension = hwMap.get(DcMotorEx.class, "suspension");
+        suspension.setDirection(DcMotorEx.Direction.FORWARD);
         suspension.setPower(0);
-        suspension.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        suspension.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
         //suspension.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         //intake
@@ -88,12 +92,14 @@ public class hardwaremap {
         //intakeWrist
         intakeWrist = hwMap.get(Servo.class, "intakeWrist");
 
-
-
         //field centric stuff
         imu = hwMap.get(IMU.class, "imu");
         IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.FORWARD, RevHubOrientationOnRobot.UsbFacingDirection.UP));
         imu.initialize(parameters);
+
+        //encoders
+        parallelEncoder = new Encoder(hwMap.get(DcMotorEx.class, "arm"));
+        perpendicularEncoder = new Encoder(hwMap.get(DcMotorEx.class, "suspension"));
     }
 
     public void power(double output) {
