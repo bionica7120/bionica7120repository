@@ -27,7 +27,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode.regionalsAuto;
+package org.firstinspires.ftc.teamcode.worldsAuto;
 
 import static java.lang.Thread.sleep;
 
@@ -59,16 +59,16 @@ import java.util.List;
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list.
  */
-@Autonomous(name = "BlueTrajectoryAuto - LEFT")
+@Autonomous(name = "RedTrajectoryAuto - RIGHT")
 //@Disabled
-public class BlueLeftTrajectoryAuto extends LinearOpMode {
+public class RedRightTrajectoryAuto extends LinearOpMode {
 
     private hardwaremap robot;
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
 
     // TFOD_MODEL_ASSET points to a model file stored in the project Asset location,
     // this is only used for Android Studio when using models in Assets.
-    private static final String TFOD_MODEL_ASSET = "BluePropModel.tflite";
+    private static final String TFOD_MODEL_ASSET = "RedPropModel.tflite";
     // TFOD_MODEL_FILE points to a model file stored onboard the Robot Controller's storage,
     // this is used when uploading models directly to the RC using the model upload interface.
     private static final String TFOD_MODEL_FILE = "/sdcard/FIRST/tflitemodels/myCustomModel.tflite";
@@ -98,43 +98,80 @@ public class BlueLeftTrajectoryAuto extends LinearOpMode {
 
         robot = new hardwaremap();
         robot.init(hardwareMap);
+
         initTfod();
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
         Trajectory center1 = drive.trajectoryBuilder(new Pose2d(0, 0, 0))
-                .forward(28)
+                .forward(29)
                 .build();
 
         Trajectory center2 = drive.trajectoryBuilder(center1.end())
-                .back(5)
+                .back(6)
                 .build();
 
-        Trajectory center3 = drive.trajectoryBuilder(center2.end().plus(new Pose2d(0, 0, Math.toRadians(-90))), false)
+        Trajectory center3 = drive.trajectoryBuilder(center2.end().plus(new Pose2d(0, 0, Math.toRadians(90))), false)
                 .back(28)
                 .build();
 
-        Trajectory left1 = drive.trajectoryBuilder(new Pose2d(0, 0, 0))
-                .forward(28)
-                .build();
-
-        Trajectory left2 = drive.trajectoryBuilder(left1.end().plus(new Pose2d(0, 0, Math.toRadians(90))), false)
-                .strafeLeft(5)
-                .build();
-
-        Trajectory left3 = drive.trajectoryBuilder(left2.end())
-                .forward(38)
-                .build();
-
-        Trajectory left4 = drive.trajectoryBuilder(left3.end())
+        Trajectory center4 = drive.trajectoryBuilder(center3.end())
                 .strafeRight(5)
                 .build();
 
+        Trajectory center5 = drive.trajectoryBuilder(center4.end())
+                .back(7)
+                .build();
+
+        Trajectory center6 = drive.trajectoryBuilder(center5.end())
+                .forward(2)
+                .build();
+
+        Trajectory center7 = drive.trajectoryBuilder(center6.end())
+                .strafeLeft(18)
+                .build();
+
+        Trajectory left1 = drive.trajectoryBuilder(new Pose2d(0, 0, 0))
+                .forward(31)
+                .build();
+
+        Trajectory left2 = drive.trajectoryBuilder(left1.end().plus(new Pose2d(0, 0, Math.toRadians(90))), false)
+                .strafeLeft(2)
+                .build();
+
+        Trajectory left3 = drive.trajectoryBuilder(left2.end())
+                .back(37)
+                .build();
+
+        Trajectory left4 = drive.trajectoryBuilder(left3.end())
+                .strafeRight(8)
+                .build();
+
+        Trajectory left5 = drive.trajectoryBuilder(left4.end())
+                .forward(3)
+                .build();
+
+        Trajectory left6 = drive.trajectoryBuilder(left5.end())
+                .strafeLeft(28)
+                .build();
+
         Trajectory right1 = drive.trajectoryBuilder(new Pose2d(0, 0, 0))
-                .forward(28)
+                .forward(31)
                 .build();
 
         Trajectory right2 = drive.trajectoryBuilder(right1.end().plus(new Pose2d(0, 0, Math.toRadians(-90))), false)
-                .back(28)
+                .strafeRight(10)
+                .build();
+
+        Trajectory right3 = drive.trajectoryBuilder(right2.end())
+                .forward(28)
+                .build();
+
+        Trajectory right4 = drive.trajectoryBuilder(right3.end().plus(new Pose2d(0, 0, Math.toRadians(180))), false)
+                .back(4)
+                .build();
+
+        Trajectory right5 = drive.trajectoryBuilder(right4.end())
+                .strafeLeft(14)
                 .build();
 
 
@@ -144,7 +181,13 @@ public class BlueLeftTrajectoryAuto extends LinearOpMode {
         telemetry.update();
         waitForStart();
 
+
+
         if (opModeIsActive()) {
+
+            intakeWristDown();
+            intakeOpenOrClose(-0.5, 250);
+
             while (opModeIsActive()) {
 
                 telemetryTfod();
@@ -153,6 +196,8 @@ public class BlueLeftTrajectoryAuto extends LinearOpMode {
                 telemetry.update();
 
                 if (pixelDetected) {
+
+                    intakeWristUp();
 
                     if (0 <= x && x <= 213)
                     {
@@ -165,7 +210,7 @@ public class BlueLeftTrajectoryAuto extends LinearOpMode {
                         sleep(500);
                         drive.turn(Math.toRadians(90));
                         sleep(500);
-                        intakeOpenOrClose(1, 3000);
+                        intakeOpenOrClose(0.5, 1000);
                         sleep(500);
                         drive.followTrajectory(left2);
                         sleep(500);
@@ -173,14 +218,18 @@ public class BlueLeftTrajectoryAuto extends LinearOpMode {
                         sleep(500);
                         drive.followTrajectory(left4);
                         sleep(500);
-                        drive.turn(Math.toRadians(180));
+                        //drive.turn(Math.toRadians(180));
+                        //sleep(500);
+                        moveArm(-0.8, 1000);
                         sleep(500);
-                        moveArm(0.5, 4000);
+                        intakeOpenOrClose(0.5, 1000);
                         sleep(500);
-                        intakeOpenOrClose(1, 3000);
+                        moveArm(0.5, 1000);
+                        moveArm(-0.2, 250);
                         sleep(500);
-                        moveArm(-0.5, 1000);
-                        moveArm(0.2, 250);
+                        drive.followTrajectory(left5);
+                        sleep(500);
+                        drive.followTrajectory(left6);
 
                         break;
 
@@ -198,16 +247,24 @@ public class BlueLeftTrajectoryAuto extends LinearOpMode {
                         sleep(500);
                         drive.turn(Math.toRadians(-90));
                         sleep(500);
-                        intakeOpenOrClose(1, 3000);
+                        intakeOpenOrClose(0.5, 1000);
                         sleep(500);
                         drive.followTrajectory(right2);
                         sleep(500);
-                        moveArm(0.5, 4000);
+                        drive.followTrajectory(right3);
                         sleep(500);
-                        intakeOpenOrClose(1, 3000);
+                        drive.turn(Math.toRadians(180));
                         sleep(500);
-                        moveArm(-0.5, 1000);
-                        moveArm(0.2, 250);
+                        drive.followTrajectory(right4);
+                        sleep(500);
+                        moveArm(-0.8, 1000);
+                        sleep(500);
+                        intakeOpenOrClose(0.5, 1000);
+                        sleep(500);
+                        moveArm(0.5, 1000);
+                        moveArm(-0.2, 250);
+                        sleep(500);
+                        drive.followTrajectory(right5);
 
                         break;
 
@@ -220,20 +277,31 @@ public class BlueLeftTrajectoryAuto extends LinearOpMode {
 
                         drive.followTrajectory(center1);
                         sleep(500);
-                        intakeOpenOrClose(1, 3000);
+                        intakeOpenOrClose(0.5, 1000);
                         sleep(500);
                         drive.followTrajectory(center2);
                         sleep(500);
-                        drive.turn(Math.toRadians(-90));
+                        drive.turn(Math.toRadians(90));
                         sleep(500);
                         drive.followTrajectory(center3);
                         sleep(500);
-                        moveArm(0.5, 4000);
+                        drive.followTrajectory(center4);
                         sleep(500);
-                        intakeOpenOrClose(1, 3000);
+                        drive.followTrajectory(center5);
                         sleep(500);
-                        moveArm(-0.5, 1000);
-                        moveArm(0.2, 250);
+                        intakeWristDown();
+                        moveArm(-0.8, 1000);
+                        sleep(500);
+                        intakeOpenOrClose(0.5, 1000);
+                        sleep(500);
+                        moveArm(0.5, 1000);
+                        moveArm(-0.2, 250);
+                        sleep(500);
+                        drive.followTrajectory(center6);
+                        sleep(500);
+                        drive.followTrajectory(center7);
+
+
 
                         break;
 
@@ -366,6 +434,14 @@ public class BlueLeftTrajectoryAuto extends LinearOpMode {
         robot.intake.setPower(power);
         sleep(milliseconds);
         robot.intake.setPower(0);
+    }
+
+    public void intakeWristUp() {
+        robot.intakeWrist.setPosition(1);
+    }
+
+    public void intakeWristDown() {
+        robot.intakeWrist.setPosition(0);
     }
 
     public void moveArm (double power, int milliseconds) throws InterruptedException {

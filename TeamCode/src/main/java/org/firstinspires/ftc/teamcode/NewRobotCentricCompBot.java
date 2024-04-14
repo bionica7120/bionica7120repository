@@ -106,7 +106,7 @@ public class NewRobotCentricCompBot extends LinearOpMode {
             robot.rightBackDrive.setPower(rightBackPower);
 
 
-            //robot.arm.setPower(Range.clip(gamepad2.right_stick_y, -0.8, 0.8));
+            robot.arm.setPower(Range.clip(gamepad2.right_stick_y, -0.8, 0.8));
             robot.intake.setPower(Range.clip(gamepad2.left_stick_y, -1, 1));
 
             if (gamepad1.right_bumper)
@@ -121,12 +121,12 @@ public class NewRobotCentricCompBot extends LinearOpMode {
 
             if (gamepad2.left_bumper)
             {
-                robot.arm.setPower(0.5);
+                robot.arm.setPower(0.8);
             }
 
             if (gamepad2.right_bumper)
             {
-                robot.arm.setPower(-0.5);
+                robot.arm.setPower(-0.8);
             }
 
             if (!gamepad1.left_bumper && !gamepad1.right_bumper)
@@ -136,7 +136,10 @@ public class NewRobotCentricCompBot extends LinearOpMode {
 
             if (!gamepad2.left_bumper && !gamepad2.right_bumper)
             {
-                robot.arm.setPower(0);
+                if (gamepad2.right_stick_y == 0)
+                {
+                    robot.arm.setPower(0);
+                }
             }
 
             if (gamepad1.x)

@@ -84,7 +84,7 @@ public class hardwaremap {
         intake.setPower(0);
         intake.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-       //intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         //drone
         drone = hwMap.get(Servo.class, "drone");
@@ -92,7 +92,7 @@ public class hardwaremap {
         //intakeWrist
         intakeWrist = hwMap.get(Servo.class, "intakeWrist");
 
-        //field centric stuff
+        //imu
         imu = hwMap.get(IMU.class, "imu");
         IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.FORWARD, RevHubOrientationOnRobot.UsbFacingDirection.UP));
         imu.initialize(parameters);

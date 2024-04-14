@@ -27,7 +27,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode.regionalsAuto;
+package org.firstinspires.ftc.teamcode.worldsAuto;
 
 import static java.lang.Thread.sleep;
 
@@ -59,16 +59,16 @@ import java.util.List;
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list.
  */
-@Autonomous(name = "RedTrajectoryAuto - RIGHT")
+@Autonomous(name = "BlueTrajectoryAuto - LEFT")
 //@Disabled
-public class RedRightTrajectoryAuto extends LinearOpMode {
+public class BlueLeftTrajectoryAuto extends LinearOpMode {
 
     private hardwaremap robot;
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
 
     // TFOD_MODEL_ASSET points to a model file stored in the project Asset location,
     // this is only used for Android Studio when using models in Assets.
-    private static final String TFOD_MODEL_ASSET = "RedPropModel.tflite";
+    private static final String TFOD_MODEL_ASSET = "BluePropModel.tflite";
     // TFOD_MODEL_FILE points to a model file stored onboard the Robot Controller's storage,
     // this is used when uploading models directly to the RC using the model upload interface.
     private static final String TFOD_MODEL_FILE = "/sdcard/FIRST/tflitemodels/myCustomModel.tflite";
@@ -109,8 +109,10 @@ public class RedRightTrajectoryAuto extends LinearOpMode {
                 .back(5)
                 .build();
 
-        Trajectory center3 = drive.trajectoryBuilder(center2.end().plus(new Pose2d(0, 0, Math.toRadians(90))), false)
+        Trajectory center3 = drive.trajectoryBuilder(center2.end().plus(new Pose2d(0, 0, Math.toRadians(-90))), false)
                 .back(28)
+//                .strafeLeft(2)
+//                .back(2)
                 .build();
 
         Trajectory left1 = drive.trajectoryBuilder(new Pose2d(0, 0, 0))
@@ -122,7 +124,7 @@ public class RedRightTrajectoryAuto extends LinearOpMode {
                 .build();
 
         Trajectory left3 = drive.trajectoryBuilder(left2.end())
-                .back(38)
+                .forward(38)
                 .build();
 
         Trajectory left4 = drive.trajectoryBuilder(left3.end())
@@ -134,11 +136,7 @@ public class RedRightTrajectoryAuto extends LinearOpMode {
                 .build();
 
         Trajectory right2 = drive.trajectoryBuilder(right1.end().plus(new Pose2d(0, 0, Math.toRadians(-90))), false)
-                .strafeRight(5)
-                .build();
-
-        Trajectory right3 = drive.trajectoryBuilder(right2.end())
-                .forward(28)
+                .back(28)
                 .build();
 
 
@@ -149,6 +147,10 @@ public class RedRightTrajectoryAuto extends LinearOpMode {
         waitForStart();
 
         if (opModeIsActive()) {
+            intakeWristDown();
+            intakeOpenOrClose(-0.5, 250);
+
+
             while (opModeIsActive()) {
 
                 telemetryTfod();
@@ -157,6 +159,8 @@ public class RedRightTrajectoryAuto extends LinearOpMode {
                 telemetry.update();
 
                 if (pixelDetected) {
+
+                    intakeWristUp();
 
                     if (0 <= x && x <= 213)
                     {
@@ -179,7 +183,8 @@ public class RedRightTrajectoryAuto extends LinearOpMode {
                         sleep(500);
                         drive.turn(Math.toRadians(180));
                         sleep(500);
-                        moveArm(0.5, 4000);
+                        intakeWristDown();
+                        moveArm(0.8, 3000);
                         sleep(500);
                         intakeOpenOrClose(1, 3000);
                         sleep(500);
@@ -206,10 +211,7 @@ public class RedRightTrajectoryAuto extends LinearOpMode {
                         sleep(500);
                         drive.followTrajectory(right2);
                         sleep(500);
-                        drive.followTrajectory(right3);
-                        sleep(500);
-                        drive.turn(Math.toRadians(180));
-                        sleep(500);
+                        intakeWristDown();
                         moveArm(0.5, 4000);
                         sleep(500);
                         intakeOpenOrClose(1, 3000);
@@ -232,10 +234,11 @@ public class RedRightTrajectoryAuto extends LinearOpMode {
                         sleep(500);
                         drive.followTrajectory(center2);
                         sleep(500);
-                        drive.turn(Math.toRadians(90));
+                        drive.turn(Math.toRadians(-90));
                         sleep(500);
                         drive.followTrajectory(center3);
                         sleep(500);
+                        intakeWristDown();
                         moveArm(0.5, 4000);
                         sleep(500);
                         intakeOpenOrClose(1, 3000);
@@ -374,6 +377,14 @@ public class RedRightTrajectoryAuto extends LinearOpMode {
         robot.intake.setPower(power);
         sleep(milliseconds);
         robot.intake.setPower(0);
+    }
+
+    public void intakeWristUp() {
+        robot.intakeWrist.setPosition(1);
+    }
+
+    public void intakeWristDown() {
+        robot.intakeWrist.setPosition(0);
     }
 
     public void moveArm (double power, int milliseconds) throws InterruptedException {
